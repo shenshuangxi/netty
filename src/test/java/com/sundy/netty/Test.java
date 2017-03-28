@@ -1,25 +1,23 @@
 package com.sundy.netty;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.apache.tools.ant.taskdefs.XSLTProcess.Factory;
 import org.jibx.binding.BindingGenerator;
 import org.jibx.binding.Compile;
 import org.jibx.binding.SchemaGenerator;
-import org.jibx.binding.ant.CompileTask;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
 import org.jibx.runtime.IUnmarshallingContext;
-import org.jibx.runtime.JiBXException;
 
-import com.sun.org.apache.regexp.internal.recompile;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.sundy.netty.bean.Address;
 import com.sundy.netty.bean.Customer;
 import com.sundy.netty.bean.Order;
-import com.sundy.netty.bean.Shipping;
+import com.sundy.netty.proto.PersonEntity;
+import com.sundy.netty.proto.PersonEntity.Person;
 
 
 public class Test {
@@ -97,8 +95,27 @@ public class Test {
 		Order order2 = new Test().decode2Order(xmlOrder);
 		System.out.println(order2);
 		
-		
+	}
 	
+	
+	@org.junit.Test
+	public void test() throws InvalidProtocolBufferException{
+		Person john = Person.newBuilder().setId(1234)
+				.setName("john doe")
+				.setEmail("jode@example.com")
+				.addPhone(Person.PhoneNumber.newBuilder().setNumber("5555-4231").setType(Person.PhoneType.HOME)).build();
+		byte[] personBytes = john.toByteArray();
+		System.out.println(personBytes.length);
+		Person p2 = Person.parseFrom(personBytes);
+		
+		System.out.println(p2);
+	}
+	
+	@org.junit.Test
+	public void testOs(){
+		System.out.println(System.getProperties().getProperty("os.name"));
+		System.out.println(File.separator);
+		System.out.println(File.separatorChar);
 	}
 
 }
